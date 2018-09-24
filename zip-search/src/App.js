@@ -1,28 +1,78 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import ZipSearchField from './components/ZipSearchField';
+import CityBox from './components/CityBox';
 import './App.css';
 
 
-function City(props) {
-  return (<div></div>);
-}
-
-function ZipSearchField(props) {
-  return (<div></div>);
-}
-
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      target: '',
+      cityList: []
+    };
+  }
+
+  getNewTarget = (newTarget) => {
+    this.setState({
+      target: newTarget
+    }, this.getCities);
+  }
+
+  getCities = () => {
+    if (this.state.target) {
+      this.callApi();
+    } else {
+      console.log('no results');
+    }
+  }
+
+  callApi = async() => {
+    const url = 'http://ctp-zip-api.herokuapp.com/zip/' + this.state.target;
+    await fetch(url)
+    .then(res => {
+      if (res.status === 404) {
+        throw Error('No results');
+      } else {
+        return res.json();
+      }
+    }).then(data => {
+      let cities = [];
+      data.map((entry) => {
+        let city = {
+          'cityName': entry.LocationText,
+          'state': entry.State,
+          'location': '(' + entry.Lat + ',' + entry.Long + ')',
+          'population': entry.EstimatedPopulation,
+          'totalWages': entry.TotalWages
+        }
+        cities.push(city);
+        return city;
+      });
+      console.log(cities);
+      this.setState({
+        cityList: cities
+      });
+      return (cities);
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <div className="App-header">
           <h2>Zip Code Search</h2>
         </div>
-        <ZipSearchField />
-        <div>
-          <City />
-          <City />
+        <div className="App-body">
+          <ZipSearchField changeHandler={this.getNewTarget} />
+          <p>
+            Target: {this.state.target}
+          </p>
+          <div>
+            <CityBox cities={this.state.cityList} />
+          </div>
         </div>
       </div>
     );

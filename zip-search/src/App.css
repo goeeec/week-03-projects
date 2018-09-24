@@ -23,3 +23,9 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.App-body {
+  font-size: 1.5em;
+  padding: 1.5em;
+  display: block;
+}
