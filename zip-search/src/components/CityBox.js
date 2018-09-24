@@ -17,12 +17,8 @@ class City extends Component {
 }
 
 class CityBox extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    if (this.props.cities.length != 0) {
+    if (this.props.cities.length !== 0) {
       return(
         <div>
           {this.props.cities.map((city, i) => {
@@ -41,7 +37,6 @@ class CityBox extends Component {
         </div>
       );
     } else {
-      console.log('no res');
       return(
         <div>
           No results

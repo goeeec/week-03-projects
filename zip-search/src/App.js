@@ -55,6 +55,9 @@ class App extends Component {
       });
       return (cities);
     }).catch(err => {
+      this.setState({
+        cityList: []
+      });
       console.log(err);
     });
   }
@@ -67,9 +70,6 @@ class App extends Component {
         </div>
         <div className="App-body">
           <ZipSearchField changeHandler={this.getNewTarget} />
-          <p>
-            Target: {this.state.target}
-          </p>
           <div>
             <CityBox cities={this.state.cityList} />
           </div>
