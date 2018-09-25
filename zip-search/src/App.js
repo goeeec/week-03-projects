@@ -27,39 +27,39 @@ class App extends Component {
     }
   }
 
-  callApi = async() => {
+  callApi = async () => {
     const url = 'http://ctp-zip-api.herokuapp.com/zip/' + this.state.target;
     await fetch(url)
-    .then(res => {
-      if (res.status === 404) {
-        throw Error('No results');
-      } else {
-        return res.json();
-      }
-    }).then(data => {
-      let cities = [];
-      data.map((entry) => {
-        let city = {
-          'cityName': entry.LocationText,
-          'state': entry.State,
-          'location': '(' + entry.Lat + ',' + entry.Long + ')',
-          'population': entry.EstimatedPopulation,
-          'totalWages': entry.TotalWages
+      .then(res => {
+        if (res.status === 404) {
+          throw Error('No results');
+        } else {
+          return res.json();
         }
-        cities.push(city);
-        return city;
+      }).then(data => {
+        let cities = [];
+        data.map((entry) => {
+          let city = {
+            'cityName': entry.LocationText,
+            'state': entry.State,
+            'location': '(' + entry.Lat + ',' + entry.Long + ')',
+            'population': entry.EstimatedPopulation,
+            'totalWages': entry.TotalWages
+          }
+          cities.push(city);
+          return city;
+        });
+        console.log(cities);
+        this.setState({
+          cityList: cities
+        });
+        return (cities);
+      }).catch(err => {
+        this.setState({
+          cityList: []
+        });
+        console.log(err);
       });
-      console.log(cities);
-      this.setState({
-        cityList: cities
-      });
-      return (cities);
-    }).catch(err => {
-      this.setState({
-        cityList: []
-      });
-      console.log(err);
-    });
   }
 
   render() {
@@ -70,9 +70,7 @@ class App extends Component {
         </div>
         <div className="App-body">
           <ZipSearchField changeHandler={this.getNewTarget} />
-          <div>
-            <CityBox cities={this.state.cityList} />
-          </div>
+          <CityBox cities={this.state.cityList} />
         </div>
       </div>
     );

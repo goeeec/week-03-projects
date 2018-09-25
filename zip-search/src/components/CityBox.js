@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 class City extends Component {
   render() {
-    return(
-      <div className="city">
-        <h2>{this.props.title}</h2>
-        <ul>
+    return (
+      <div className="card">
+        <h2 className="card-header">{this.props.title}</h2>
+        <ul className="card-body">
           <li>State: {this.props.state}</li>
           <li>Location: {this.props.location}</li>
           <li>Population (estimated): {this.props.population}</li>
@@ -18,11 +18,12 @@ class City extends Component {
 
 class CityBox extends Component {
   render() {
+    console.log(this.props.cities.length);
     if (this.props.cities.length !== 0) {
-      return(
-        <div>
+      return (
+        <div className="city-box">
           {this.props.cities.map((city, i) => {
-            return(
+            return (
               <City
                 title={city.cityName}
                 state={city.state}
@@ -37,7 +38,7 @@ class CityBox extends Component {
         </div>
       );
     } else {
-      return(
+      return (
         <div>
           No results
         </div>
