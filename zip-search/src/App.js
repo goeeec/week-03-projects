@@ -20,10 +20,10 @@ class App extends Component {
   }
 
   getCities = () => {
-    if (this.state.target) {
+    if (this.state.target.length === 5) {
       this.callApi();
     } else {
-      console.log('no results');
+      console.log('Error: zip code length invalid');
     }
   }
 
@@ -31,10 +31,10 @@ class App extends Component {
     const url = 'http://ctp-zip-api.herokuapp.com/zip/' + this.state.target;
     await fetch(url)
       .then(res => {
-        if (res.status === 404) {
-          throw Error('No results');
-        } else {
+        if (res.status === 200) {
           return res.json();
+        } else {
+          throw Error('No results');
         }
       }).then(data => {
         let cities = [];
